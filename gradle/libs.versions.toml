@@ -3,7 +3,7 @@
 minecraft       = "1.20.1"
 forge           = "47.4.10"
 # ---- AE2 & addons ----
-ae2             = "15.4.10"
+ae2             = "15.4.11"
 ae2wtlib        = "15.3.3-forge"
 ae2wcwt         = "1.20.1.5"
 guideme         = "20.1.15"
@@ -35,7 +35,7 @@ curios          = "5.14.1+1.20.1"
 configuration   = "2.2.1"              # 本地 flatDir: libs/configuration-forge-1.20.1-2.2.1.jar
 mixin           = "0.8.5"
 # ---- Recipe viewers ----
-jei             = "15.20.0.106"
+jei             = "15.62.0.217"
 emi             = "1.1.22+1.20.1"
 
 [libraries]
