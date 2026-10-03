@@ -7,7 +7,7 @@ import appeng.client.gui.Icon;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.common.gui.JeiTooltip;
 import mezz.jei.gui.elements.GuiIconToggleButton;
-import mezz.jei.gui.input.UserInput;
+import mezz.jei.common.input.UserInput;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
