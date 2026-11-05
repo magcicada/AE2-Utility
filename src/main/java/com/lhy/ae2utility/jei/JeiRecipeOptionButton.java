@@ -5,36 +5,38 @@ import java.util.function.BooleanSupplier;
 
 import appeng.client.gui.Icon;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.common.gui.JeiTooltip;
-import mezz.jei.gui.elements.GuiIconToggleButton;
-import mezz.jei.common.input.UserInput;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
+import mezz.jei.api.gui.buttons.IButtonState;
+import mezz.jei.api.gui.buttons.IIconButtonController;
+import mezz.jei.api.gui.inputs.IJeiUserInput;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
-public final class JeiRecipeOptionButton extends GuiIconToggleButton {
+public final class JeiRecipeOptionButton implements IIconButtonController {
     private final Definition definition;
 
     public JeiRecipeOptionButton(Definition definition) {
-        super(definition.offIcon(), definition.onIcon());
         this.definition = definition;
     }
 
     @Override
-    protected void getTooltips(JeiTooltip tooltip) {
+    public void getTooltips(ITooltipBuilder tooltip) {
         for (Component line : definition.tooltip(definition.isOn())) {
             tooltip.add(line);
         }
     }
 
     @Override
-    protected boolean isIconToggledOn() {
-        return definition.isOn();
+    public void updateState(IButtonState state) {
+        boolean enabled = definition.isOn();
+        state.setForcePressed(enabled);
+        state.setIcon(enabled ? definition.onIcon() : definition.offIcon());
     }
 
     @Override
-    protected boolean onMouseClicked(UserInput input) {
+    public boolean onPress(IJeiUserInput input) {
         if (!input.isSimulate()) {
             definition.press().run();
         }

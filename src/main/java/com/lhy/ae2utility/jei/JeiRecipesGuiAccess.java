@@ -11,6 +11,9 @@ import org.jetbrains.annotations.Nullable;
 import com.lhy.ae2utility.Ae2UtilityMod;
 
 import mezz.jei.api.gui.IRecipeLayoutDrawable;
+import mezz.jei.gui.recipes.IRecipeLayoutWithButtons;
+import mezz.jei.gui.recipes.lookups.IFocusedRecipes;
+import mezz.jei.gui.recipes.lookups.ILookupState;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.runtime.IJeiRuntime;
@@ -28,7 +31,6 @@ public final class JeiRecipesGuiAccess {
     private static @Nullable Field recipeLayoutsWithButtonsField;
     private static @Nullable Field logicField;
     private static @Nullable Field stateField;
-    private static @Nullable Method recipeLayoutMethod;
     private static @Nullable Method focusedRecipesMethod;
     private static @Nullable Method recipesMethod;
     private static @Nullable Method recipeCategoryMethod;
@@ -87,22 +89,9 @@ public final class JeiRecipesGuiAccess {
     }
 
     private static @Nullable IRecipeLayoutDrawable<?> getRecipeLayout(Object layoutWithButtons) {
-        if (layoutWithButtons == null || reflectionFailed) {
-            return null;
-        }
-
-        try {
-            if (recipeLayoutMethod == null) {
-                recipeLayoutMethod = layoutWithButtons.getClass().getDeclaredMethod("recipeLayout");
-                recipeLayoutMethod.setAccessible(true);
-            }
-            Object value = recipeLayoutMethod.invoke(layoutWithButtons);
-            return value instanceof IRecipeLayoutDrawable<?> recipeLayout ? recipeLayout : null;
-        } catch (ReflectiveOperationException | RuntimeException e) {
-            reflectionFailed = true;
-            Ae2UtilityMod.LOGGER.warn("Failed to access JEI recipe layout", e);
-            return null;
-        }
+        return layoutWithButtons instanceof IRecipeLayoutWithButtons<?> row
+                ? row.getRecipeLayout()
+                : null;
     }
 
     public static List<IRecipeLayoutDrawable<?>> createSelectedCategoryRecipeLayouts(Screen screen) {
@@ -157,7 +146,7 @@ public final class JeiRecipesGuiAccess {
     private static @Nullable Object invokeFocusedRecipes(Object state)
             throws ReflectiveOperationException {
         if (focusedRecipesMethod == null) {
-            focusedRecipesMethod = state.getClass().getMethod("getFocusedRecipes");
+            focusedRecipesMethod = ILookupState.class.getMethod("getFocusedRecipes");
         }
         return focusedRecipesMethod.invoke(state);
     }
@@ -165,7 +154,7 @@ public final class JeiRecipesGuiAccess {
     private static @Nullable Object invokeRecipes(Object focusedRecipes)
             throws ReflectiveOperationException {
         if (recipesMethod == null) {
-            recipesMethod = focusedRecipes.getClass().getMethod("getRecipes");
+            recipesMethod = IFocusedRecipes.class.getMethod("getRecipes");
         }
         return recipesMethod.invoke(focusedRecipes);
     }
@@ -173,7 +162,7 @@ public final class JeiRecipesGuiAccess {
     private static @Nullable Object invokeRecipeCategory(Object focusedRecipes)
             throws ReflectiveOperationException {
         if (recipeCategoryMethod == null) {
-            recipeCategoryMethod = focusedRecipes.getClass().getMethod("getRecipeCategory");
+            recipeCategoryMethod = IFocusedRecipes.class.getMethod("getRecipeCategory");
         }
         return recipeCategoryMethod.invoke(focusedRecipes);
     }

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.lhy.ae2utility.jei.JeiRecipeOptionButton;
 
-import mezz.jei.gui.elements.GuiIconToggleButton;
+import mezz.jei.gui.elements.IconButton;
 import mezz.jei.gui.recipes.RecipeOptionButtons;
 
 @Mixin(value = RecipeOptionButtons.class, remap = false)
@@ -21,15 +21,15 @@ public abstract class RecipeOptionButtonsMixin {
     @Shadow
     @Final
     @Mutable
-    private List<GuiIconToggleButton> buttons;
+    private List<IconButton> buttons;
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void ae2utility$prependButtons(Runnable onValueChanged, CallbackInfo callbackInfo) {
-        List<GuiIconToggleButton> extendedButtons = new ArrayList<>(buttons.size() + 4);
-        extendedButtons.add(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.BATCH_PAGE));
-        extendedButtons.add(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.BATCH_CATEGORY));
-        extendedButtons.add(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.ITEM_SUBSTITUTION));
-        extendedButtons.add(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.FLUID_SUBSTITUTION));
+        List<IconButton> extendedButtons = new ArrayList<>(buttons.size() + 4);
+        extendedButtons.add(new IconButton(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.BATCH_PAGE)));
+        extendedButtons.add(new IconButton(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.BATCH_CATEGORY)));
+        extendedButtons.add(new IconButton(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.ITEM_SUBSTITUTION)));
+        extendedButtons.add(new IconButton(JeiRecipeOptionButton.create(JeiRecipeOptionButton.Kind.FLUID_SUBSTITUTION)));
         extendedButtons.addAll(buttons);
         buttons = extendedButtons;
     }
