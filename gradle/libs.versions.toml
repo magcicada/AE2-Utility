@@ -35,7 +35,7 @@ curios          = "5.14.1+1.20.1"
 configuration   = "2.2.1"              # 本地 flatDir: libs/configuration-forge-1.20.1-2.2.1.jar
 mixin           = "0.8.5"
 # ---- Recipe viewers ----
-jei             = "15.62.0.217"
+jei             = "15.74.0.234"
 emi             = "1.1.22+1.20.1"
 
 [libraries]
